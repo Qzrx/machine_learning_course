@@ -1,14 +1,19 @@
-fitted_line_graph <- function(progression)
+fitted_line_graph <- function(progression, max_rows_to_accept=1000, sample_size=1000)
 {
-  #browser()
   xydataset <- read.csv('data.csv',header=F)
-  # xydataset <- as.data.frame(cbind(1:6, 1:6))
+  
   names(xydataset) <- c("x","y")
   names(progression) <- c("b","m")
   left_x <- 0  # min(xydataset$x)
   right_x <- max(xydataset$x) * 1.05
   g <- NULL
   progression$ranking <- nrow(progression):1
+  
+  if(nrow(progression) > max_rows_to_accept)
+  {
+    progression <- arrange(progression[sample(1:nrow(progression), sample_size, replace=FALSE),], -ranking)
+  }
+  
   for(n in 1:nrow(progression))
   {
     m <- progression[n,"m"]
@@ -22,10 +27,9 @@ fitted_line_graph <- function(progression)
   }
   g <- as.data.frame(g)
   names(g) <- c("x","y","r")
-#   print(head(g))
-#   print(head(xydataset))
+  
+  
   m <- eval(ggplot(xydataset, aes(x=x,y=y))
-    #ggplot(g, aes(x=x, y=y, alpha=-ranking, group=ranking))
             + scale_x_continuous(breaks=seq(0,10,1))
             + geom_line(data=g, aes(x=x, y=y, alpha=exp(-r), group=r), colour="gray50")
 #             + scale_colour_discrete(low="grey20", high="grey80")
