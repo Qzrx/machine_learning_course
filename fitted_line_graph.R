@@ -1,7 +1,7 @@
 fitted_line_graph <- function(progression, max_rows_to_accept=1000, sample_size=1000)
 {
   xydataset <- read.csv('data.csv',header=F)
-  
+  print(head(progression))
   names(xydataset) <- c("x","y")
   names(progression) <- c("b","m")
   left_x <- 0  # min(xydataset$x)
