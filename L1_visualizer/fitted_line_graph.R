@@ -1,9 +1,8 @@
 fitted_line_graph <- function(progression, max_rows_to_accept=1000, sample_size=1000)
 {
   xydataset <- read.csv('data.csv',header=F)
-  print(head(progression))
   names(xydataset) <- c("x","y")
-  names(progression) <- c("b","m")
+  names(progression) <- c("m","b")
   left_x <- 0  # min(xydataset$x)
   right_x <- max(xydataset$x) * 1.05
   g <- NULL
@@ -28,15 +27,17 @@ fitted_line_graph <- function(progression, max_rows_to_accept=1000, sample_size=
   g <- as.data.frame(g)
   names(g) <- c("x","y","r")
   
+  error_data <- errorbar_data(progression, xydataset)
   
-  m <- eval(ggplot(xydataset, aes(x=x,y=y))
+  m <- eval(ggplot()
             + scale_x_continuous(breaks=seq(0,10,1))
             + geom_line(data=g, aes(x=x, y=y, alpha=exp(-r), group=r), colour="gray50")
 #             + scale_colour_discrete(low="grey20", high="grey80")
-            + geom_point(colour="gray25", size=5)
+            + geom_point(data=xydataset, aes(x=x, y=y), colour="gray25", size=5)
             + geom_line(data=g[(nrow(g)-1):nrow(g),], aes(x=x, y=y),colour="#33CCFF",size=1.5, alpha=0.8)
-            + theme(legend.position='none')
+            + geom_errorbar(data=error_data, aes(x=xhat, ymin=ymin, ymax=ymax), width=0, color="red", size=1)
             + theme_bw()
+            + theme(legend.position='none')
             + coord_cartesian(ylim = c(0,2.2)))
   
   

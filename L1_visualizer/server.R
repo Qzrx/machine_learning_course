@@ -1,6 +1,7 @@
 library(shiny)
 library(ggplot2)
 source('fitted_line_graph.R')
+source('errorbar_data.R')
 
 # Define server logic required to generate and plot a random distribution
 shinyServer(function(input, output) {
