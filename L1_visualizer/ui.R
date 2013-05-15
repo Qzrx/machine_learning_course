@@ -6,7 +6,7 @@ shinyUI(pageWithSidebar(
   # Application title
   headerPanel("Visualize your machine learning!"),
   
-  # Sidebar with a slider input for number of observations
+  # File input box
   conditionalPanel(
     condition = "file != null",
  #   sidebarPanel(
@@ -14,7 +14,7 @@ shinyUI(pageWithSidebar(
   #  )
   ),
   
-  # Show a plot of the generated distribution
+  # Show a plot of the generated slope/intercept pairs
   mainPanel(
     plotOutput("dispPlot"),
 #     tableOutput("fileTable")
